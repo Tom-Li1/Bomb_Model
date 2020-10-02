@@ -165,20 +165,20 @@ def countDown(minute, num_screen, beeper):
 	# blink and show text on it
 	for _ in range(5):
 		num_screen.show('boon')
-		beeper.beep(0.2)
+		beeper.beep(0.4)
 		num_screen.write([0, 0, 0, 0])
-		time.sleep(0.2)
+		time.sleep(0.4)
 
 # Behavior after timing
 def timeIsUp(num_screen):
 	time.sleep(1)
-	for _ in range(4):
+	for _ in range(5):
 		num_screen.show('You')
-		time.sleep(0.5)
+		time.sleep(0.8)
 		num_screen.show('Are')
-		time.sleep(0.5)
+		time.sleep(0.8)
 		num_screen.show('Fool')
-		time.sleep(0.5)
+		time.sleep(0.8)
 
 # turn off all devices
 def powerOff(oled_screen, num_screen, beeper):
@@ -200,11 +200,11 @@ def main():
 	# wait for http request from user and block process unitl get a acceptable http request
 	minute = rcStart(ap_obj, beeper, oled_screen)
 	# show the image during countdown
-	showImage(oled_screen, 'countdown.json')
+	showImage(oled_screen, 'countdown.txt')
 	# start countdown
 	countDown(minute, timer_screen, beeper)
 	# show the image in the end of the process
-	showImage(oled_screen, 'timeisup.json')
+	showImage(oled_screen, 'timeisup.txt')
 	# finish the process
 	timeIsUp(timer_screen)
 	powerOff(oled_screen, timer_screen, beeper) # close all, reboot the board to play again.
