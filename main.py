@@ -109,19 +109,28 @@ def selfCheck(beeper, oled_screen, num_screen):
 	oled_screen.show()
 	beeper.beep(0.5)
 
-# read the json and show image
-def showImage(oled_screen, json_path):
-	# json_path is a path of a json file that contains the pixel list
-	fobj = open(json_path, 'r')
-	lst = json.load(fobj)
-	fobj.close()
-
+# read the txt file and show image
+def showImage(oled_screen, file_path):
+	# file_path is the path of a txt file that contains the coordinate of pixels
+	file = open(file_path, 'r')
 	oled_screen.fill(0) # shutdown all pixels at first to aviod the stack with previous image
-	for p in lst:
-		oled_screen.pixel(p[0], p[1], 1) # go through the list and light pixels up one by one
-	oled_screen.show()
 
-	del lst
+	reading = True
+	while reading:
+		line = file.readline()[:-1] # only read one line in each cycle and remove '\n' in the end
+		if line == '': # stop read when finish
+			reading = False
+			del line
+		else:
+			pix_lst = line.split(' ') # x,y x,y x,y >>> ['x,y', 'x,y', 'x,y']
+			del line
+			for p in pix_lst:
+				p = p.split(',') # x,y >>> [x, y]
+				oled_screen.pixel(int(p[0]), int(p[1]), 1) # change the pixel's state to ON
+			del pix_lst
+			del p # delete useless variables to save memory
+
+	oled_screen.show() # show all ON pixels on OLED
 
 # show the time of count down by refresh the 4-digit screen each second
 def countDown(minute, num_screen, beeper):
